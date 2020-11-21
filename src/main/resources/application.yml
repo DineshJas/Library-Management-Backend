@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/capestart?createDatabaseIfNotExist=true&autoReconnect=true
+    username: postgres
+    password: Ccare@123
+
+server:
+  port: 8080
+  servlet:
+    context-path: /

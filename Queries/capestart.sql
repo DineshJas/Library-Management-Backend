@@ -30,12 +30,16 @@ CREATE TABLE public.book
     book_image oid ,
     publisher_id bigint NOT NULL ,
     author_id bigint NOT NULL ,
+    user_id bigint NOT NULL,
+    is_book_lent smallint NOT NULL DEFAULT 0,
     is_delete smallint NOT NULL DEFAULT 0,
     CONSTRAINT book_id_pkey PRIMARY KEY (book_id) ,
     CONSTRAINT fkey_book_author FOREIGN KEY (author_id)
     REFERENCES public.author (author_id) ,
     CONSTRAINT fkey_book_publisher FOREIGN KEY (publisher_id)
-    REFERENCES public.publisher (publisher_id)
+    REFERENCES public.publisher (publisher_id) ,
+    CONSTRAINT fkey_book_user FOREIGN KEY (user_id)
+    REFERENCES public.user (user_id)
 );
 
 --Author Table
@@ -62,3 +66,10 @@ CREATE TABLE public.publisher
     CONSTRAINT publisher_id_pkey PRIMARY KEY (publisher_id)
 );
 
+
+--ALTER TABLE public.book 
+--ADD COLUMN is_book_lent smallint NOT NULL DEFAULT 0;
+--
+--ALTER TABLE public.book ADD COLUMN user_id BIGINT DEFAULT NULL;
+--ALTER TABLE public.book ADD CONSTRAINT book_fk FOREIGN KEY (user_id) 
+--REFERENCES public.user (user_id);

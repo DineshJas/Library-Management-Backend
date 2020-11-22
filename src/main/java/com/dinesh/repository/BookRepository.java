@@ -14,5 +14,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 	Book findByBookId(long bookId);
 
 	List<Book> findByIsDeleteOrderByBookIdAsc(byte isdeletetrue);
+	
+	Book findByBookIdAndIsBookLent(long bookId, byte isdeletetrue);
 
 }

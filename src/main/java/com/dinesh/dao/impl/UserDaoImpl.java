@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.dinesh.bean.AddBookBean;
 import com.dinesh.bean.EditBookBean;
+import com.dinesh.bean.LendBookBean;
 import com.dinesh.bean.RegisterUserBean;
 import com.dinesh.dao.UserDao;
 import com.dinesh.entity.Author;
@@ -101,6 +102,7 @@ public class UserDaoImpl implements UserDao {
 			book.setBookCategory(addBookBean.getBookCategory());
 			book.setIsDelete(isDeleteFalse);
 			book.setBookImage(addBookBean.getBookImage());
+			book.setIsBookLent(active);
 			bookRepo.save(book);
 			params.put("response", "New book added successfully");
 			params.put("response_code", 0);
@@ -194,6 +196,7 @@ public class UserDaoImpl implements UserDao {
 				response.put("bookImage", book.getBookImage());
 				response.put("authorName", book.getAuthor().getAuthorName());
 				response.put("publisherName", book.getPublisher().getPublisherName());
+				response.put("isBookLented", book.getIsBookLent());
 				responseList.add(response);
 			}
 			params.put("response", responseList);
@@ -274,6 +277,58 @@ public class UserDaoImpl implements UserDao {
 			}
 			
 			userRepo.save(user);
+			params.put("response_code", 0);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return params;
+	}
+
+	@Override
+	public Map<String, Object> lendBookToUser(@Valid LendBookBean lendBookBean) {
+		Map<String, Object> params = new LinkedHashMap<String, Object>();
+		try {
+			User user = userRepo.findByUserIdAndIsActive(lendBookBean.getUserId(), active);
+			if(user == null){
+				params.put("response", "User details not found");
+				params.put("response_code", -1);
+				return params;
+			}
+			
+			Book book = bookRepo.findByBookIdAndIsBookLent(lendBookBean.getBookId(), active);
+			if(book == null){
+				params.put("response", "Book is already lented");
+				params.put("response_code", -1);
+				return params;
+			}
+			
+			book.setIsBookLent(inactive);
+			book.setUser(user);
+			bookRepo.save(book);
+			params.put("response", "Book lented to user.");
+			params.put("response_code", 0);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return params;
+	}
+
+	@Override
+	public Map<String, Object> getActiveUsersList() {
+		Map<String, Object> params = new LinkedHashMap<String, Object>();
+		try {
+			List<User> usersList = userRepo.findByIsActiveAndUserTypeOrderByUserIdAsc(active, normal_user);
+			
+			ArrayList<Object> responseList = new ArrayList<>();
+			for (User user : usersList) {
+				Map<String, Object> response = new LinkedHashMap<String, Object>();
+				response.put("userId", user.getUserId());
+				response.put("userName", user.getUserName());
+				responseList.add(response);
+			}
+			params.put("response", responseList);
 			params.put("response_code", 0);
 			
 		} catch (Exception e) {

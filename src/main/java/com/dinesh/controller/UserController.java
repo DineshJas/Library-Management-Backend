@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dinesh.bean.AddBookBean;
 import com.dinesh.bean.EditBookBean;
+import com.dinesh.bean.LendBookBean;
 import com.dinesh.bean.RegisterUserBean;
 import com.dinesh.dao.UserDao;
 
@@ -148,14 +149,36 @@ public class UserController {
 		return params;
 	}
 	
-//	@RequestMapping(method = RequestMethod.PUT, value="/edit/book")
-//	public Map<?, ?> editBook(@RequestBody  @Valid EditBookBean editBookBean, BindingResult result){
-//		Map<String, Object> params = new LinkedHashMap<String, Object>();/
-//		try {
-
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return params;
-//	}
+	@RequestMapping(method = RequestMethod.PUT, value="/lend/book")
+	public Map<?, ?> lendBookToUser(@RequestBody  @Valid LendBookBean lendBookBean, BindingResult result){
+		Map<String, Object> params = new LinkedHashMap<String, Object>();
+		try {
+			if(lendBookBean.getUserId() == 0){
+				params.put("response", "User Id value needed");
+				params.put("response_code", -1);
+				return params;
+			}
+			
+			if(lendBookBean.getBookId() == 0){
+				params.put("response", "Book Id value needed");
+				params.put("response_code", -1);
+				return params;
+			}
+			params = userDao.lendBookToUser(lendBookBean);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return params;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/get/active/users/list")
+	public Map<?, ?> getActiveUsersList(){
+		Map<String, Object> params = new LinkedHashMap<String, Object>();
+		try {	
+			params = userDao.getActiveUsersList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return params;
+	}
 }

@@ -14,4 +14,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 	User findByUserId(long userId);
 	
+	User findByUserIdAndIsActive(long userId, byte isActive);
+	
+	List<User> findByIsActiveAndUserTypeOrderByUserIdAsc(byte isActive, byte userType);
 }

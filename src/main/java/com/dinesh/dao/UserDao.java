@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import com.dinesh.bean.AddBookBean;
 import com.dinesh.bean.EditBookBean;
+import com.dinesh.bean.LendBookBean;
 import com.dinesh.bean.RegisterUserBean;
 
 public interface UserDao {
@@ -25,5 +26,9 @@ public interface UserDao {
 	Map<String, Object> getUsersList();
 
 	Map<String, Object> deleteUserDetail(long userId);
+
+	Map<String, Object> lendBookToUser(@Valid LendBookBean lendBookBean);
+
+	Map<String, Object> getActiveUsersList();
 
 }

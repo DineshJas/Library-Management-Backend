@@ -40,6 +40,13 @@ public class Book {
 	
 	@Column(name = "is_delete", nullable = false)
 	private byte isDelete;
+	
+	@Column(name = "is_book_lent", nullable = false)
+	private byte isBookLent;
+	
+	@ManyToOne(cascade=CascadeType.DETACH)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 
 	public long getBookId() {
 		return bookId;
@@ -95,6 +102,22 @@ public class Book {
 
 	public void setIsDelete(byte isDelete) {
 		this.isDelete = isDelete;
+	}
+
+	public byte getIsBookLent() {
+		return isBookLent;
+	}
+
+	public void setIsBookLent(byte isBookLent) {
+		this.isBookLent = isBookLent;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }
